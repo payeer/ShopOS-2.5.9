@@ -14,12 +14,12 @@ define('MODULE_PAYMENT_PAYEER_MERCHANT_ID_TITLE', 'Идентификатор м
 define('MODULE_PAYMENT_PAYEER_MERCHANT_ID_DESC', 'Идентификатор магазина, зарегистрированного в системе "PAYEER".<br/>Узнать его можно в <a href="http://www.payeer.com/account/">аккаунте Payeer</a>: "Аккаунт -> Мой магазин -> Изменить".');
 define('MODULE_PAYMENT_PAYEER_SECRET_KEY_TITLE', 'Секретный ключ');
 define('MODULE_PAYMENT_PAYEER_SECRET_KEY_DESC', 'Секретный ключ оповещения о выполнении платежа,<br/>который используется для проверки целостности полученной информации<br/>и однозначной идентификации отправителя.<br/>Должен совпадать с секретным ключем, указанным в <a href="http://www.payeer.com/account/">аккаунте Payeer</a>: "Аккаунт -> Мой магазин -> Изменить".');
-define('MODULE_PAYMENT_PAYEER_CURRENCY_TITLE', 'Валюта магазина');
-define('MODULE_PAYMENT_PAYEER_CURRENCY_DESC', 'Код валюты (RUB, USD, EUR, UAH)');
 define('MODULE_PAYMENT_PAYEER_IPFILTER_TITLE', 'IP фильтр');
 define('MODULE_PAYMENT_PAYEER_IPFILTER_DESC', 'Список доверенных ip адресов, можно указать маску');
 define('MODULE_PAYMENT_PAYEER_EMAILERR_TITLE', 'Email');
 define('MODULE_PAYMENT_PAYEER_EMAILERR_DESC', 'Email для отправки ошибок оплаты');
-define('MODULE_PAYMENT_PAYEER_LOGFILE_TITLE', 'Журнал');
-define('MODULE_PAYMENT_PAYEER_LOGFILE_DESC', 'Журнал запросов от Payeer сохраняется в файле: /payeer_orders.log');
+define('MODULE_PAYMENT_PAYEER_LOGFILE_TITLE', 'Путь до файла для журнала оплат через Payeer (например, /payeer_orders.log)');
+define('MODULE_PAYMENT_PAYEER_LOGFILE_DESC', 'Если путь не указан, то журнал не записывается');
+define('MODULE_PAYMENT_PAYEER_DESCRIPTION_TITLE', 'Комментарий к оплате');
+define('MODULE_PAYMENT_PAYEER_DESCRIPTION_DESC', 'Пояснение оплаты заказа');
 ?>
