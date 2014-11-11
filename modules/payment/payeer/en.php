@@ -14,12 +14,12 @@ define('MODULE_PAYMENT_PAYEER_MERCHANT_ID_TITLE', 'ID store');
 define('MODULE_PAYMENT_PAYEER_MERCHANT_ID_DESC', 'The store identifier registered in the system "PAYEER".<br/>it can be found in <a href="http://www.payeer.com/account/">Payeer account</a>: "Account -> My store -> Edit".');
 define('MODULE_PAYMENT_PAYEER_SECRET_KEY_TITLE', 'Secret key');
 define('MODULE_PAYMENT_PAYEER_SECRET_KEY_DESC', 'The secret key notification about the payment,<br/>which is used to verify the integrity of the received information<br/>and unambiguous identification of the sender.<br/>Must match the secret key specified in the <a href="http://www.payeer.com/account/">Payeer account</a>: "Account -> My store -> Edit".');
-define('MODULE_PAYMENT_PAYEER_CURRENCY_TITLE', 'Currency');
-define('MODULE_PAYMENT_PAYEER_CURRENCY_DESC', 'Currency code (RUB, USD, EUR, UAH)');
 define('MODULE_PAYMENT_PAYEER_IPFILTER_TITLE', 'IP filter');
 define('MODULE_PAYMENT_PAYEER_IPFILTER_DESC', 'The list of trusted ip addresses, you can specify the mask');
 define('MODULE_PAYMENT_PAYEER_EMAILERR_TITLE', 'Email');
 define('MODULE_PAYMENT_PAYEER_EMAILERR_DESC', 'Email to send payment errors');
-define('MODULE_PAYMENT_PAYEER_LOGFILE_TITLE', 'Log');
-define('MODULE_PAYMENT_PAYEER_LOGFILE_DESC', 'The query log from Payeer is stored in the file: /payeer_orders.log');
+define('MODULE_PAYMENT_PAYEER_LOGFILE_TITLE', 'The path to the log file for payments via Payeer (for example, /payeer_orders.log)');
+define('MODULE_PAYMENT_PAYEER_LOGFILE_DESC', 'If path is not specified, the log is not written');
+define('MODULE_PAYMENT_PAYEER_DESCRIPTION_TITLE', 'Comment for payment');
+define('MODULE_PAYMENT_PAYEER_DESCRIPTION_DESC', 'Explanation of payment');
 ?>
