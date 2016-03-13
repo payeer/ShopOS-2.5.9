@@ -56,7 +56,7 @@ class payeer
 		$m_orderid = $order_id + 1;
 		$m_amount = number_format($order->info['total'], 2, '.', '');
 		$m_curr = $order->info['currency'] == 'RUR' ? 'RUB' : $order->info['currency'];
-		$m_desc = base64_encode('111');
+		$m_desc = base64_encode('Оплата заказа №' . $m_orderid);
 		$m_key = MODULE_PAYMENT_PAYEER_SECRET_KEY;
 
 		$arHash = array(
