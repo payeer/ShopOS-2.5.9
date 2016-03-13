@@ -1,8 +1,8 @@
 <?php
 
-  class payeer 
-  {
-    var $code, $title, $description, $enabled;
+class payeer 
+{
+	var $code, $title, $description, $enabled;
 
     function payeer() 
 	{
@@ -54,18 +54,9 @@
 		$order_id = os_db_fetch_array($order_id_query);
 		$order_id = $order_id['max'];
 		$m_orderid = $order_id + 1;
-
 		$m_amount = number_format($order->info['total'], 2, '.', '');
-
-		$m_curr = $order->info['currency'];
-		
-		if ($m_curr == 'RUR')
-		{
-			$m_curr = 'RUB';
-		}
-
-		$m_desc = base64_encode(MODULE_PAYMENT_PAYEER_DESCRIPTION);
-
+		$m_curr = $order->info['currency'] == 'RUR' ? 'RUB' : $order->info['currency'];
+		$m_desc = base64_encode('111');
 		$m_key = MODULE_PAYMENT_PAYEER_SECRET_KEY;
 
 		$arHash = array(
@@ -79,13 +70,13 @@
 
 		$sign = strtoupper(hash('sha256', implode(':', $arHash)));
 		
-		$process_button_string =os_draw_hidden_field('m_shop', $m_shop) .
-								os_draw_hidden_field('m_orderid', $m_orderid) .
-								os_draw_hidden_field('m_amount', $order->info['total']) .
-								os_draw_hidden_field('m_curr', $m_curr) .
-								os_draw_hidden_field('m_desc', $m_desc) . 
-								os_draw_hidden_field('m_sign', $sign);
-								
+		$process_button_string = os_draw_hidden_field('m_shop', $m_shop) .
+		os_draw_hidden_field('m_orderid', $m_orderid) .
+		os_draw_hidden_field('m_amount', $order->info['total']) .
+		os_draw_hidden_field('m_curr', $m_curr) .
+		os_draw_hidden_field('m_desc', $m_desc) . 
+		os_draw_hidden_field('m_sign', $sign);
+
 		return $process_button_string;
     }
 
@@ -117,14 +108,13 @@
     function install() 
 	{
 		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, date_added) values ('MODULE_PAYMENT_PAYEER_STATUS', 'True', '6', '1', 'os_cfg_select_option(array(\'True\', \'False\'), ', now())");
-		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_MERCHANT_URL', '//payeer.com/merchant/', '6', '8', now())");
+		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_MERCHANT_URL', 'https://payeer.com/merchant/', '6', '8', now())");
 		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_MERCHANT_ID', '', '6', '0', now())");
 		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_SECRET_KEY', '', '6', '1', now())");
-		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_DESCRIPTION', '', '6', '2', now())");
-		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_IPFILTER', '', '6', '4', now())");
-		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_EMAILERR', '', '6', '5', now())");
-		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_LOGFILE', '', '6', '6', now())");
-		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_SORT_ORDER', '1', '6', '7', now())");
+		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_IPFILTER', '', '6', '3', now())");
+		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_EMAILERR', '', '6', '4', now())");
+		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_LOGFILE', '', '6', '5', now())");
+		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, date_added) values ('MODULE_PAYMENT_PAYEER_SORT_ORDER', '1', '6', '6', now())");
 		os_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_key, configuration_value, configuration_group_id, sort_order, set_function, use_function, date_added) values ('MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID', '0', '6', '0', 'os_cfg_pull_down_order_statuses(', 'os_get_order_status_name', now())");
     }
 
@@ -140,7 +130,6 @@
 			'MODULE_PAYMENT_PAYEER_MERCHANT_URL',
 			'MODULE_PAYMENT_PAYEER_MERCHANT_ID',
 			'MODULE_PAYMENT_PAYEER_SECRET_KEY',
-			'MODULE_PAYMENT_PAYEER_DESCRIPTION', 
 			'MODULE_PAYMENT_PAYEER_IPFILTER', 
 			'MODULE_PAYMENT_PAYEER_EMAILERR', 
 			'MODULE_PAYMENT_PAYEER_LOGFILE', 
@@ -148,5 +137,5 @@
 			'MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID'
 		);
     }
-  }
+}
 ?>
