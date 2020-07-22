@@ -26,17 +26,17 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 
 	$log_text = 
 	"--------------------------------------------------------\n" .
-	"operation id       " . $_POST['m_operation_id'] . "\n" .
-	"operation ps       " . $_POST['m_operation_ps'] . "\n" .
-	"operation date     " . $_POST['m_operation_date'] . "\n" .
-	"operation pay date " . $_POST['m_operation_pay_date'] . "\n" .
-	"shop               " . $_POST['m_shop'] . "\n" .
-	"order id           " . $_POST['m_orderid'] . "\n" .
-	"amount             " . $_POST['m_amount'] . "\n" .
-	"currency           " . $_POST['m_curr'] . "\n" .
-	"description        " . base64_decode($_POST['m_desc']) . "\n" .
-	"status             " . $_POST['m_status'] . "\n" .
-	"sign               " . $_POST['m_sign'] . "\n\n";
+	"operation id		" . $_POST['m_operation_id'] . "\n" .
+	"operation ps		" . $_POST['m_operation_ps'] . "\n" .
+	"operation date		" . $_POST['m_operation_date'] . "\n" .
+	"operation pay date	" . $_POST['m_operation_pay_date'] . "\n" .
+	"shop				" . $_POST['m_shop'] . "\n" .
+	"order id			" . $_POST['m_orderid'] . "\n" .
+	"amount				" . $_POST['m_amount'] . "\n" .
+	"currency			" . $_POST['m_curr'] . "\n" .
+	"description		" . base64_decode($_POST['m_desc']) . "\n" .
+	"status				" . $_POST['m_status'] . "\n" .
+	"sign				" . $_POST['m_sign'] . "\n\n";
 	
 	$log_file = $config['MODULE_PAYMENT_PAYEER_LOGFILE'];
 	
@@ -90,19 +90,23 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 		$err = true;
 	}
 	
-	// загрузка заказа
-		
-	$check_query = os_db_query("select orders_id, orders_status from " . TABLE_ORDERS . " where orders_id = '$orderid'");
-	$order = os_db_fetch_array($check_query);
-	
-	if (!$err && $order)
+	if (!$err)
 	{
-		switch ($_POST['m_status'])
+		// загрузка заказа
+		
+		$check_query = os_db_query("select orders_id from " . TABLE_ORDERS . " where orders_id = '$orderid'");
+		$flag = os_db_num_rows($check_query);
+		
+		if ($flag <= 0) 
 		{
-			case 'success':
-			
-				if ($order['orders_status'] != $config['MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID'])
-				{
+			$message .= " - wrong order id\n";
+			$err = true;
+		}
+		else
+		{
+			switch ($request['m_status'])
+			{
+				case 'success':
 					$sq_a = array('orders_status' => $config['MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID']);
 					os_db_perform(DB_PREFIX . 'orders', $sq_a, 'update', "orders_id='$orderid'");
 
@@ -121,14 +125,9 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 						$message .= " - failed to change the status of the order to success\n";
 						$err = true;
 					}
-				}
-				
-				break;
-				
-			default:
-			
-				if ($order['orders_status'] != 3)
-				{
+					break;
+					
+				default:
 					$sq_a = array('orders_status' => 3);
 					os_db_perform(DB_PREFIX . 'orders', $sq_a, 'update', "orders_id='$orderid'");
 
@@ -150,10 +149,10 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 					{
 						$message .= " - failed to change the status of the order to fail\n";
 					}
-				}
-				
-				$err = true;
-				break;
+					
+					$err = true;
+					break;
+			}
 		}
 	}
 	
@@ -171,7 +170,7 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 		
 		exit ($orderid . '|error');
 	}
-	elseif ($order)
+	else
 	{
 		exit ($orderid . '|success');
 	}

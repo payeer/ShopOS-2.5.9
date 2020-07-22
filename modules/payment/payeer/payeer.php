@@ -15,6 +15,12 @@ class payeer
 		$this->icon_small = 'payeer.png';
 		$this->sort_order = MODULE_PAYMENT_PAYEER_SORT_ORDER;
 		$this->enabled = ((MODULE_PAYMENT_PAYEER_STATUS == 'True') ? true : false);
+
+		if ((int)MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID > 0) 
+		{
+			$this->order_status = MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID;
+		}
+
 		$this->form_action_url = MODULE_PAYMENT_PAYEER_MERCHANT_URL;
     }
 
@@ -79,11 +85,10 @@ class payeer
 		return false;
     }
 
-    function after_process() {
-		global $insert_id;
-		if ($this->order_status)
-			os_db_query("UPDATE ".TABLE_ORDERS." SET orders_status='".$this->order_status."' WHERE orders_id='".$insert_id."'");
-	}
+    function after_process()
+	{
+		return false;
+    }
 
     function output_error()
 	{
