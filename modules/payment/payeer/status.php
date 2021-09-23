@@ -1,11 +1,10 @@
 <?php
 include_once($_SERVER ['DOCUMENT_ROOT'] . '/includes/top.php');
 
-if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
-{
+if (isset($_POST['m_operation_id']) && isset($_POST['m_sign'])) {
 	$err = false;
 	$message = '';
-	$orderid = $_POST['m_orderid'];
+	$orderid = intval($_POST['m_orderid']);
 	
 	$q = os_db_query("
 		SELECT `configuration_key`, `configuration_value` FROM `" . TABLE_CONFIGURATION . "` WHERE `configuration_key` IN (
@@ -17,15 +16,13 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 		)
 	");
 
-	while ($data = os_db_fetch_array($q))
-	{
+	while ($data = os_db_fetch_array($q)) {
 		$config[$data['configuration_key']] = $data['configuration_value'];
 	}
 	
 	// запись логов
 
-	$log_text = 
-	"--------------------------------------------------------\n" .
+	$log_text = "--------------------------------------------------------\n" .
 	"operation id       " . $_POST['m_operation_id'] . "\n" .
 	"operation ps       " . $_POST['m_operation_ps'] . "\n" .
 	"operation date     " . $_POST['m_operation_date'] . "\n" .
@@ -40,8 +37,7 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 	
 	$log_file = $config['MODULE_PAYMENT_PAYEER_LOGFILE'];
 	
-	if (!empty($log_file))
-	{
+	if (!empty($log_file)) {
 		file_put_contents($_SERVER['DOCUMENT_ROOT'] . $log_file, $log_text, FILE_APPEND);
 	}
 	
@@ -64,8 +60,7 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 	$valid_ip = true;
 	$sIP = str_replace(' ', '', $config['MODULE_PAYMENT_PAYEER_IPFILTER']);
 	
-	if (!empty($sIP))
-	{
+	if (!empty($sIP)) {
 		$arrIP = explode('.', $_SERVER['REMOTE_ADDR']);
 		if (!preg_match('/(^|,)(' . $arrIP[0] . '|\*{1})(\.)' .
 		'(' . $arrIP[1] . '|\*{1})(\.)' .
@@ -76,16 +71,14 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 		}
 	}
 	
-	if (!$valid_ip)
-	{
+	if (!$valid_ip) {
 		$message .= " - the ip address of the server is not trusted\n" . 
 		"   trusted ip: " . $sIP . "\n" .
 		"   ip of the current server: " . $_SERVER['REMOTE_ADDR'] . "\n";
 		$err = true;
 	}
 
-	if ($_POST['m_sign'] != $sign_hash)
-	{
+	if ($_POST['m_sign'] != $sign_hash) {
 		$message .= " - do not match the digital signature\n";
 		$err = true;
 	}
@@ -95,14 +88,11 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 	$check_query = os_db_query("select orders_id, orders_status from " . TABLE_ORDERS . " where orders_id = '$orderid'");
 	$order = os_db_fetch_array($check_query);
 	
-	if (!$err && $order)
-	{
-		switch ($_POST['m_status'])
-		{
+	if (!$err && $order) {
+		switch ($_POST['m_status']) {
 			case 'success':
 			
-				if ($order['orders_status'] != $config['MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID'])
-				{
+				if ($order['orders_status'] != $config['MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID']) {
 					$sq_a = array('orders_status' => $config['MODULE_PAYMENT_PAYEER_ORDER_STATUS_ID']);
 					os_db_perform(DB_PREFIX . 'orders', $sq_a, 'update', "orders_id='$orderid'");
 
@@ -116,8 +106,7 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 					
 					$record = os_db_perform(DB_PREFIX . 'orders_status_history', $sq_a);
 
-					if ($record != 1)
-					{
+					if ($record != 1) {
 						$message .= " - failed to change the status of the order to success\n";
 						$err = true;
 					}
@@ -127,8 +116,7 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 				
 			default:
 			
-				if ($order['orders_status'] != 3)
-				{
+				if ($order['orders_status'] != 3) {
 					$sq_a = array('orders_status' => 3);
 					os_db_perform(DB_PREFIX . 'orders', $sq_a, 'update', "orders_id='$orderid'");
 
@@ -142,12 +130,10 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 					
 					$record = os_db_perform(DB_PREFIX . 'orders_status_history', $sq_a);
 					
-					if ($record == 1)
-					{
+					if ($record == 1) {
 						$message .= " - the payment status is not success\n";
 					}
-					else
-					{
+					else {
 						$message .= " - failed to change the status of the order to fail\n";
 					}
 				}
@@ -157,12 +143,10 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 		}
 	}
 	
-	if ($err)
-	{
+	if ($err) {
 		$to = $config['MODULE_PAYMENT_PAYEER_EMAILERR'];
 
-		if (!empty($to))
-		{
+		if (!empty($to)) {
 			$message = "Failed to make the payment through the system Payeer for the following reasons:\n\n" . $message . "\n" . $log_text;
 			$headers = "From: no-reply@" . $_SERVER['HTTP_HOST'] . "\r\n" . 
 			"Content-type: text/plain; charset=utf-8 \r\n";
@@ -171,8 +155,7 @@ if (isset($_POST['m_operation_id']) && isset($_POST['m_sign']))
 		
 		exit ($orderid . '|error');
 	}
-	elseif ($order)
-	{
+	elseif ($order) {
 		exit ($orderid . '|success');
 	}
 }
