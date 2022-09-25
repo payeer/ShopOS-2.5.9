@@ -1,0 +1,5 @@
+Código:	Nombre:	Experiencia registrada:	Ejemplo:
+NÚMERO DE CUENTA	Número de tarjeta	^ [ 4 ] { 1 } [ \ re ] { 1 5 } $	4 1 2 1 0 7 X X X X 7 8 5 5 7 7
+PERSONA DE CONTACTO	Nombre del titular de la tarjeta	^ [ a - z A - Z А Á В Г Д Е Ё Ж З И К Л М Í О П Р С Т У Ф Х Ц Ч Ш Щ Ь Ы Ъ Э Ю Я а б в г д е з ё _ _ й к л м н о п р с т уф х ц ч ш щ ь ы ъ э ю я \ . \ - \ ' ] { 2 , 2 5 } [ ] { 1 } [ a - z A - Z А В Г Д Е Ё Ж З И К Л М Н О П Р С Т У Ф Х Ц Ч _ Ш Щ Ü ë ê Ý î ï à ð в å å å ё Ö ï и ê ê ë Ü í ð ï ð ð ð ê ê ê ê ê ê ê ê ê ê ê ê ê ê ê \ . \ - \ ' ] { 2 , 2 5 } $	A N D R E W S M I T H
+CIUDAD	Ciudad beneficiaria	^ [ a - z A - Z А Á В Г Д Е Ё Ж З И К Л М Í О П Р С Т У Ф Х Ц Ч Ш Щ Ь Ы Ъ Э Ю Я а б в г д е з ё _ _ й к л м н о п р с т уфх ц ч ш щ ь ы ъ э ю я \ . \ - \ ' ] { 3 , 1 0 0 } $	Londres _ _ _ _ _
+FECHA DE NACIMIENTO	Fecha de nacimiento del beneficiario	^ ( 0 [ 1 - 9 ] | [ 1 2 ] [ 0 - 9 ] | 3 [ 0 1 ] ) \ . ( 0 [ 1 - 9 ] | 1 [ 0 1 2 ] ) \ . ( 1 9 | 2 0 ) [ 0 - 9 ] { 2 } $	3 0 . 0 1 . 1 9 9 0
